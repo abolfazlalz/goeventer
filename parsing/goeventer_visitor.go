@@ -22,6 +22,9 @@ type GoEventerVisitor interface {
 	// Visit a parse tree produced by GoEventerParser#forStat.
 	VisitForStat(ctx *ForStatContext) interface{}
 
+	// Visit a parse tree produced by GoEventerParser#whileStat.
+	VisitWhileStat(ctx *WhileStatContext) interface{}
+
 	// Visit a parse tree produced by GoEventerParser#defineListener.
 	VisitDefineListener(ctx *DefineListenerContext) interface{}
 

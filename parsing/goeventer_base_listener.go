@@ -50,6 +50,12 @@ func (s *BaseGoEventerListener) EnterForStat(ctx *ForStatContext) {}
 // ExitForStat is called when production forStat is exited.
 func (s *BaseGoEventerListener) ExitForStat(ctx *ForStatContext) {}
 
+// EnterWhileStat is called when production whileStat is entered.
+func (s *BaseGoEventerListener) EnterWhileStat(ctx *WhileStatContext) {}
+
+// ExitWhileStat is called when production whileStat is exited.
+func (s *BaseGoEventerListener) ExitWhileStat(ctx *WhileStatContext) {}
+
 // EnterDefineListener is called when production defineListener is entered.
 func (s *BaseGoEventerListener) EnterDefineListener(ctx *DefineListenerContext) {}
 

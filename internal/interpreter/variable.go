@@ -12,6 +12,7 @@ const (
 	StringVariable VariableType = iota
 	IntegerVariable
 	BoolVariable
+	ChanVariable
 	UndefinedVariable
 )
 
@@ -22,6 +23,8 @@ func GetVariableType(value interface{}) VariableType {
 		return StringVariable
 	} else if _, ok := value.(bool); ok {
 		return BoolVariable
+	} else if _, ok := value.(chan Variable); ok {
+		return ChanVariable
 	}
 	return UndefinedVariable
 }

@@ -27,6 +27,10 @@ func (v *BaseGoEventerVisitor) VisitForStat(ctx *ForStatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseGoEventerVisitor) VisitWhileStat(ctx *WhileStatContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseGoEventerVisitor) VisitDefineListener(ctx *DefineListenerContext) interface{} {
 	return v.VisitChildren(ctx)
 }

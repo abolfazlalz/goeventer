@@ -22,6 +22,9 @@ type GoEventerListener interface {
 	// EnterForStat is called when entering the forStat production.
 	EnterForStat(c *ForStatContext)
 
+	// EnterWhileStat is called when entering the whileStat production.
+	EnterWhileStat(c *WhileStatContext)
+
 	// EnterDefineListener is called when entering the defineListener production.
 	EnterDefineListener(c *DefineListenerContext)
 
@@ -111,6 +114,9 @@ type GoEventerListener interface {
 
 	// ExitForStat is called when exiting the forStat production.
 	ExitForStat(c *ForStatContext)
+
+	// ExitWhileStat is called when exiting the whileStat production.
+	ExitWhileStat(c *WhileStatContext)
 
 	// ExitDefineListener is called when exiting the defineListener production.
 	ExitDefineListener(c *DefineListenerContext)

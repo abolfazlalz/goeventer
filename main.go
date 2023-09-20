@@ -1,8 +1,7 @@
 package main
 
 import (
-	"fmt"
-	"github.com/abolfazlalz/goeventer/internal/language/interpreter"
+	"github.com/abolfazlalz/goeventer/internal/interpreter"
 	"github.com/abolfazlalz/goeventer/parsing"
 	"os"
 
@@ -18,5 +17,4 @@ func main() {
 	tree := p.Parse()
 	v := interpreter.NewVisitor()
 	v.Visit(tree)
-	fmt.Scanf("%s")
 }

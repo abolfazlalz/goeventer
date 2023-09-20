@@ -112,6 +112,20 @@ func (v *Visitor) VisitFunctionDefineArguments(ctx *parsing.FunctionDefineArgume
 	return ids
 }
 
+func (v *Visitor) VisitWhileStat(ctx *parsing.WhileStatContext) interface{} {
+	defer v.exitLastState()
+	v.enterNewState()
+
+	for {
+		val := v.Visit(ctx.Expr()).(*Variable)
+		if val.Type != BoolVariable || !val.Boolean() {
+			break
+		}
+		v.Visit(ctx.StatBlock())
+	}
+	return nil
+}
+
 func (v *Visitor) VisitForStat(ctx *parsing.ForStatContext) interface{} {
 	defer v.exitLastState()
 	v.enterNewState()
@@ -237,13 +251,12 @@ func (v *Visitor) VisitMethodCallArguments(ctx *parsing.MethodCallArgumentsConte
 }
 
 func (v *Visitor) VisitMethodCallExpr(ctx *parsing.MethodCallExprContext) interface{} {
-	//TODO implement me
-	panic("implement me")
+	return v.Visit(ctx.MethodCall())
 }
 
 func (v *Visitor) VisitNotExpr(ctx *parsing.NotExprContext) interface{} {
-	//TODO implement me
-	panic("implement me")
+	val := v.Visit(ctx.Expr()).(*Variable)
+	return !val.Boolean()
 }
 
 func (v *Visitor) VisitUnaryMinusExpr(ctx *parsing.UnaryMinusExprContext) interface{} {
@@ -342,6 +355,6 @@ func (v *Visitor) VisitStringAtom(ctx *parsing.StringAtomContext) interface{} {
 	return NewVariable(str)
 }
 
-func (v *Visitor) VisitNilAtom(ctx *parsing.NilAtomContext) interface{} {
+func (v *Visitor) VisitNilAtom(_ *parsing.NilAtomContext) interface{} {
 	return nil
 }

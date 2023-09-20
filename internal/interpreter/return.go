@@ -7,6 +7,3 @@ type ReturnStatement struct {
 func NewReturnStatement(variable *Variable) *ReturnStatement {
 	return &ReturnStatement{variable: variable}
 }
-
-
-
