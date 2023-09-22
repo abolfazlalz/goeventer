@@ -1,8 +1,8 @@
 package main
 
 import (
-	"github.com/abolfazlalz/goeventer/internal/interpreter"
-	"github.com/abolfazlalz/goeventer/parsing"
+	parsing2 "github.com/abolfazlalz/goeventer/internal/interpreter/grammar"
+	"github.com/abolfazlalz/goeventer/internal/interpreter/visitor"
 	"os"
 
 	"github.com/antlr4-go/antlr/v4"
@@ -10,11 +10,11 @@ import (
 
 func main() {
 	input, _ := antlr.NewFileStream(os.Args[1])
-	lexer := parsing.NewGoEventerLexer(input)
+	lexer := parsing2.NewGoEventerLexer(input)
 	stream := antlr.NewCommonTokenStream(lexer, 0)
-	p := parsing.NewGoEventerParser(stream)
+	p := parsing2.NewGoEventerParser(stream)
 	p.BuildParseTrees = true
 	tree := p.Parse()
-	v := interpreter.NewVisitor()
+	v := visitor.NewVisitor()
 	v.Visit(tree)
 }

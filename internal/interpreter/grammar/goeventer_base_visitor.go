@@ -1,6 +1,6 @@
 // Code generated from GoEventer.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
-package parsing // GoEventer
+package grammar // GoEventer
 import "github.com/antlr4-go/antlr/v4"
 
 type BaseGoEventerVisitor struct {
@@ -20,6 +20,10 @@ func (v *BaseGoEventerVisitor) VisitStat(ctx *StatContext) interface{} {
 }
 
 func (v *BaseGoEventerVisitor) VisitAssignVariable(ctx *AssignVariableContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseGoEventerVisitor) VisitNotifyChanStat(ctx *NotifyChanStatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -128,5 +132,9 @@ func (v *BaseGoEventerVisitor) VisitStringAtom(ctx *StringAtomContext) interface
 }
 
 func (v *BaseGoEventerVisitor) VisitNilAtom(ctx *NilAtomContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseGoEventerVisitor) VisitMakeChanAtom(ctx *MakeChanAtomContext) interface{} {
 	return v.VisitChildren(ctx)
 }

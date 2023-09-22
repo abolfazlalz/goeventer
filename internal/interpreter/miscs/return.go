@@ -1,4 +1,4 @@
-package interpreter
+package miscs
 
 type ReturnStatement struct {
 	variable *Variable
@@ -6,4 +6,8 @@ type ReturnStatement struct {
 
 func NewReturnStatement(variable *Variable) *ReturnStatement {
 	return &ReturnStatement{variable: variable}
+}
+
+func (rs ReturnStatement) Variable() *Variable {
+	return rs.variable
 }

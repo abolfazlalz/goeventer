@@ -1,6 +1,6 @@
 // Code generated from GoEventer.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
-package parsing // GoEventer
+package grammar // GoEventer
 import "github.com/antlr4-go/antlr/v4"
 
 // A complete Visitor for a parse tree produced by GoEventerParser.
@@ -18,6 +18,9 @@ type GoEventerVisitor interface {
 
 	// Visit a parse tree produced by GoEventerParser#assignVariable.
 	VisitAssignVariable(ctx *AssignVariableContext) interface{}
+
+	// Visit a parse tree produced by GoEventerParser#notifyChanStat.
+	VisitNotifyChanStat(ctx *NotifyChanStatContext) interface{}
 
 	// Visit a parse tree produced by GoEventerParser#forStat.
 	VisitForStat(ctx *ForStatContext) interface{}
@@ -99,4 +102,7 @@ type GoEventerVisitor interface {
 
 	// Visit a parse tree produced by GoEventerParser#nilAtom.
 	VisitNilAtom(ctx *NilAtomContext) interface{}
+
+	// Visit a parse tree produced by GoEventerParser#makeChanAtom.
+	VisitMakeChanAtom(ctx *MakeChanAtomContext) interface{}
 }

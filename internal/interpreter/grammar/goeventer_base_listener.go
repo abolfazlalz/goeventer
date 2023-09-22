@@ -1,6 +1,6 @@
 // Code generated from GoEventer.g4 by ANTLR 4.13.0. DO NOT EDIT.
 
-package parsing // GoEventer
+package grammar // GoEventer
 import "github.com/antlr4-go/antlr/v4"
 
 // BaseGoEventerListener is a complete listener for a parse tree produced by GoEventerParser.
@@ -43,6 +43,12 @@ func (s *BaseGoEventerListener) EnterAssignVariable(ctx *AssignVariableContext) 
 
 // ExitAssignVariable is called when production assignVariable is exited.
 func (s *BaseGoEventerListener) ExitAssignVariable(ctx *AssignVariableContext) {}
+
+// EnterNotifyChanStat is called when production notifyChanStat is entered.
+func (s *BaseGoEventerListener) EnterNotifyChanStat(ctx *NotifyChanStatContext) {}
+
+// ExitNotifyChanStat is called when production notifyChanStat is exited.
+func (s *BaseGoEventerListener) ExitNotifyChanStat(ctx *NotifyChanStatContext) {}
 
 // EnterForStat is called when production forStat is entered.
 func (s *BaseGoEventerListener) EnterForStat(ctx *ForStatContext) {}
@@ -205,3 +211,9 @@ func (s *BaseGoEventerListener) EnterNilAtom(ctx *NilAtomContext) {}
 
 // ExitNilAtom is called when production nilAtom is exited.
 func (s *BaseGoEventerListener) ExitNilAtom(ctx *NilAtomContext) {}
+
+// EnterMakeChanAtom is called when production makeChanAtom is entered.
+func (s *BaseGoEventerListener) EnterMakeChanAtom(ctx *MakeChanAtomContext) {}
+
+// ExitMakeChanAtom is called when production makeChanAtom is exited.
+func (s *BaseGoEventerListener) ExitMakeChanAtom(ctx *MakeChanAtomContext) {}

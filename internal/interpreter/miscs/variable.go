@@ -1,4 +1,4 @@
-package interpreter
+package miscs
 
 import (
 	"fmt"
@@ -50,6 +50,10 @@ func NewVariable(value interface{}) *Variable {
 	}
 }
 
+func NewChanVariable() *Variable {
+	return NewVariable(make(chan Variable, 1))
+}
+
 func (v Variable) TypeName() string {
 	return v.Type.String()
 }
@@ -86,6 +90,16 @@ func (v Variable) Integer() int {
 		return val
 	}
 	return 0
+}
+
+func (v Variable) Chan() chan Variable {
+	if v.Type != ChanVariable {
+		panic("value is not channel")
+	}
+	if val, ok := v.Value.(chan Variable); ok {
+		return val
+	}
+	panic("not defined channel")
 }
 
 func (v Variable) panicForUndefinedVariable(sec *Variable) {
@@ -150,4 +164,9 @@ func (v Variable) Pow(sec *Variable) interface{} {
 		panic("Invalid operation: Only Integer Variables are allowed ")
 	}
 	return math.Pow(float64(v.Integer()), float64(sec.Integer()))
+}
+
+func (v Variable) NotifyChan(vb Variable) {
+	ch := v.Chan()
+	ch <- vb
 }
