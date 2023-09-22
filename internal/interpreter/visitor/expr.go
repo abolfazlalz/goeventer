@@ -6,18 +6,19 @@ import (
 )
 
 func (v *Visitor) VisitNotExpr(ctx *grammar.NotExprContext) interface{} {
-	val := v.Visit(ctx.Expr()).(*miscs.Variable)
-	return !val.Boolean()
+	result := v.Visit(ctx.Expr())
+	val := v.variableFromContext(result)
+	return miscs.NewVariable(!val.Boolean())
 }
 
 func (v *Visitor) VisitUnaryMinusExpr(ctx *grammar.UnaryMinusExprContext) interface{} {
-	value := v.Visit(ctx.Expr()).(*miscs.Variable)
+	value := v.variableFromContext(v.Visit(ctx.Expr()))
 	return miscs.NewVariable(value.Multiple(miscs.NewVariable(-1)))
 }
 
 func (v *Visitor) VisitMultiplicationExpr(ctx *grammar.MultiplicationExprContext) interface{} {
-	left := v.Visit(ctx.Expr(0)).(*miscs.Variable)
-	right := v.Visit(ctx.Expr(1)).(*miscs.Variable)
+	left := v.variableFromContext(v.Visit(ctx.Expr(0)))
+	right := v.variableFromContext(v.Visit(ctx.Expr(1)))
 	switch ctx.GetOp().GetTokenType() {
 	case grammar.GoEventerLexerMULT:
 		return left.Multiple(right)
@@ -31,26 +32,26 @@ func (v *Visitor) VisitMultiplicationExpr(ctx *grammar.MultiplicationExprContext
 }
 
 func (v *Visitor) VisitOrExpr(ctx *grammar.OrExprContext) interface{} {
-	v1 := v.Visit(ctx.Expr(0)).(*miscs.Variable)
-	v2 := v.Visit(ctx.Expr(1)).(*miscs.Variable)
-	return v1.Boolean() || v2.Boolean()
+	v1 := v.variableFromContext(v.Visit(ctx.Expr(0)))
+	v2 := v.variableFromContext(v.Visit(ctx.Expr(1)))
+	return miscs.NewVariable(v1.Boolean() || v2.Boolean())
 }
 
 func (v *Visitor) VisitAdditiveExpr(ctx *grammar.AdditiveExprContext) interface{} {
-	v1 := v.Visit(ctx.Expr(0)).(*miscs.Variable)
-	v2 := v.Visit(ctx.Expr(1)).(*miscs.Variable)
+	v1 := v.variableFromContext(v.Visit(ctx.Expr(0)))
+	v2 := v.variableFromContext(v.Visit(ctx.Expr(1)))
 	return miscs.NewVariable(v1.Sum(v2))
 }
 
 func (v *Visitor) VisitPowExpr(ctx *grammar.PowExprContext) interface{} {
-	v1 := v.Visit(ctx.Expr(0)).(*miscs.Variable)
-	v2 := v.Visit(ctx.Expr(1)).(*miscs.Variable)
+	v1 := v.variableFromContext(v.Visit(ctx.Expr(0)))
+	v2 := v.variableFromContext(v.Visit(ctx.Expr(1)))
 	return miscs.NewVariable(v1.Pow(v2))
 }
 
 func (v *Visitor) VisitRelationalExpr(ctx *grammar.RelationalExprContext) interface{} {
-	v1 := v.Visit(ctx.Expr(0)).(*miscs.Variable)
-	v2 := v.Visit(ctx.Expr(1)).(*miscs.Variable)
+	v1 := v.variableFromContext(v.Visit(ctx.Expr(0)))
+	v2 := v.variableFromContext(v.Visit(ctx.Expr(1)))
 	val := false
 	if ctx.LT() != nil {
 		val = v1.Integer() < v2.Integer()
@@ -66,13 +67,13 @@ func (v *Visitor) VisitRelationalExpr(ctx *grammar.RelationalExprContext) interf
 }
 
 func (v *Visitor) VisitEqualityExpr(ctx *grammar.EqualityExprContext) interface{} {
-	v1 := v.Visit(ctx.Expr(0)).(*miscs.Variable)
-	v2 := v.Visit(ctx.Expr(1)).(*miscs.Variable)
+	v1 := v.variableFromContext(v.Visit(ctx.Expr(0)))
+	v2 := v.variableFromContext(v.Visit(ctx.Expr(1)))
 	return miscs.NewVariable(v1.Equal(v2))
 }
 
 func (v *Visitor) VisitAndExpr(ctx *grammar.AndExprContext) interface{} {
-	return v.Visit(ctx.Expr(0)).(bool) && v.Visit(ctx.Expr(1)).(bool)
+	return miscs.NewVariable(v.Visit(ctx.Expr(0)).(bool) && v.Visit(ctx.Expr(1)).(bool))
 }
 
 func (v *Visitor) VisitAtomExpr(ctx *grammar.AtomExprContext) interface{} {
