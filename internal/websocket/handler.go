@@ -1,4 +1,4 @@
-package socket
+package websocket
 
 import (
 	"github.com/gorilla/websocket"
@@ -7,13 +7,17 @@ import (
 )
 
 type Handler struct {
-	ClientManager *ClientManager
+	clientManager *ClientManager
 	upgrader      websocket.Upgrader
+}
+
+func (handler *Handler) ClientManager() *ClientManager {
+	return handler.clientManager
 }
 
 func NewHandler(clientManager *ClientManager) *Handler {
 	return &Handler{
-		ClientManager: clientManager,
+		clientManager: clientManager,
 		upgrader: websocket.Upgrader{
 			ReadBufferSize:  1024,
 			WriteBufferSize: 1024,
@@ -44,16 +48,22 @@ func (handler *Handler) getNewClient(w http.ResponseWriter, r *http.Request) (*C
 	clientID := conn.RemoteAddr().String()
 
 	client := NewClient(clientID, conn)
+	go func() {
+		for {
+			client.writer()
+		}
+	}()
+	GetClientListener().Notify(client)
 
 	// Add the client to the Manager
-	handler.ClientManager.AddClient(client)
+	handler.clientManager.AddClient(client)
 
 	return client, nil
 }
 
 func (handler *Handler) handleClientMessages(client *Client) {
 	defer func() {
-		handler.ClientManager.RemoveClient(client.ID)
+		handler.clientManager.RemoveClient(client.ID)
 		client.Conn.Close()
 	}()
 
@@ -65,19 +75,19 @@ func (handler *Handler) handleClientMessages(client *Client) {
 		}
 
 		// Put incoming message to client's channel
-		client.Channel <- message
+		for _, listener := range client.listeners {
+			listener <- NewChat(client.ID, string(message))
+		}
 	}
 }
 
 func (handler *Handler) Broadcast(id string, message string) {
-	client, ok := handler.ClientManager.Clients[id]
+	client, ok := handler.clientManager.clients[id]
 	if !ok {
 		log.Printf("Client %s not found", id)
 		return
 	}
-	err := client.Conn.WriteMessage(websocket.TextMessage, []byte(message))
-	if err != nil {
-		log.Println(err)
-		return
-	}
+
+	// send message to the client's Send channel
+	client.send <- []byte(message)
 }
