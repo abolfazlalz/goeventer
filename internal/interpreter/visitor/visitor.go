@@ -3,6 +3,7 @@ package visitor
 import (
 	"github.com/abolfazlalz/goeventer/internal/interpreter/grammar"
 	"github.com/abolfazlalz/goeventer/internal/interpreter/miscs"
+	"github.com/abolfazlalz/goeventer/internal/websocket"
 	"github.com/antlr4-go/antlr/v4"
 	"sync"
 )
@@ -13,15 +14,20 @@ type Visitor struct {
 	variables map[int]map[string]*miscs.Variable
 	functions map[string]func(...interface{}) interface{}
 	state     int
+	ch        chan *websocket.Chat
 }
 
 func NewVisitor() *Visitor {
+	ch := make(chan *websocket.Chat, 1)
+
 	v := &Visitor{
 		BaseGoEventerVisitor: &grammar.BaseGoEventerVisitor{},
 		variables:            map[int]map[string]*miscs.Variable{0: make(map[string]*miscs.Variable)},
 		state:                0,
 		functions:            map[string]func(...interface{}) interface{}{},
+		ch:                   ch,
 	}
+
 	v.loadBuiltinMethods()
 	return v
 }

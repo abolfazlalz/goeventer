@@ -9,13 +9,21 @@ import (
 type Handler struct {
 	clientManager *ClientManager
 	upgrader      websocket.Upgrader
+	chatCh        []chan *Chat
 }
 
 func (handler *Handler) ClientManager() *ClientManager {
 	return handler.clientManager
 }
 
+func (handler *Handler) AddChatListener(ch chan *Chat) {
+	handler.chatCh = append(handler.chatCh, ch)
+}
+
 func NewHandler(clientManager *ClientManager) *Handler {
+	if clientManager == nil {
+		clientManager = NewClientManager()
+	}
 	return &Handler{
 		clientManager: clientManager,
 		upgrader: websocket.Upgrader{
@@ -74,9 +82,13 @@ func (handler *Handler) handleClientMessages(client *Client) {
 			return
 		}
 
+		chat := NewChat(client.ID, string(message))
 		// Put incoming message to client's channel
 		for _, listener := range client.listeners {
-			listener <- NewChat(client.ID, string(message))
+			listener <- chat
+		}
+		for _, listener := range handler.chatCh {
+			listener <- chat
 		}
 	}
 }
