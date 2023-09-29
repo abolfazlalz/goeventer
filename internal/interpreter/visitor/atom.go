@@ -3,6 +3,8 @@ package visitor
 import (
 	"github.com/abolfazlalz/goeventer/internal/interpreter/grammar"
 	"github.com/abolfazlalz/goeventer/internal/interpreter/miscs"
+	"github.com/antlr4-go/antlr/v4"
+	"github.com/samber/lo"
 	"strconv"
 	"strings"
 )
@@ -12,7 +14,17 @@ func (v *Visitor) VisitBooleanAtom(ctx *grammar.BooleanAtomContext) interface{} 
 }
 
 func (v *Visitor) VisitIdAtom(ctx *grammar.IdAtomContext) interface{} {
-	return v.getVariable(ctx.ID().GetText())
+	ids := lo.Map(ctx.AllID(), func(item antlr.TerminalNode, _ int) string {
+		return item.GetText()
+	})
+	id := ids[0]
+	value := v.getVariable(id)
+	if len(ids) > 1 {
+		for i := 1; i < len(ids); i++ {
+			value = value.FieldStruct(ids[i])
+		}
+	}
+	return value
 }
 
 func (v *Visitor) VisitStringAtom(ctx *grammar.StringAtomContext) interface{} {

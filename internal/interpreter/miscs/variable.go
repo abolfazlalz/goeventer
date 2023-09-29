@@ -8,11 +8,14 @@ import (
 
 type VariableType int
 
+type StructType map[string]*Variable
+
 const (
 	StringVariable VariableType = iota
 	IntegerVariable
 	BoolVariable
 	ChanVariable
+	StructVariable
 	UndefinedVariable
 )
 
@@ -25,6 +28,8 @@ func GetVariableType(value interface{}) VariableType {
 		return BoolVariable
 	} else if _, ok := value.(chan Variable); ok {
 		return ChanVariable
+	} else if _, ok := value.(StructType); ok {
+		return StructVariable
 	}
 	return UndefinedVariable
 }
@@ -54,15 +59,15 @@ func NewChanVariable() *Variable {
 	return NewVariable(make(chan Variable, 1))
 }
 
-func (v Variable) TypeName() string {
+func (v *Variable) TypeName() string {
 	return v.Type.String()
 }
 
-func (v Variable) String() string {
+func (v *Variable) String() string {
 	return fmt.Sprintf("%v", v.Value)
 }
 
-func (v Variable) Boolean() bool {
+func (v *Variable) Boolean() bool {
 	if v.Type != BoolVariable {
 		panic("value is not a bool value.")
 	}
@@ -73,14 +78,33 @@ func (v Variable) Boolean() bool {
 	return false
 }
 
-func (v Variable) StringValue() string {
+func (v *Variable) StringValue() string {
 	if v.Type != StringVariable {
 		panic("value is not a string value.")
 	}
 	return fmt.Sprintf("%v", v.Value)
 }
 
-func (v Variable) Integer() int {
+func (v *Variable) StructValue() StructType {
+	if v.Type != StructVariable {
+		panic("value is not a struct type")
+	}
+	return v.Value.(StructType)
+}
+
+func (v *Variable) FieldStruct(field string) *Variable {
+	structValue := v.StructValue()
+	variable := structValue[field]
+	return variable
+}
+
+func (v *Variable) SetFieldStruct(field string, value *Variable) {
+	structValue := v.StructValue()
+	structValue[field] = value
+	v.Value = structValue
+}
+
+func (v *Variable) Integer() int {
 	if v.Type != IntegerVariable {
 		panic("Value is not a integer value.")
 	}
@@ -92,7 +116,7 @@ func (v Variable) Integer() int {
 	return 0
 }
 
-func (v Variable) Chan() chan Variable {
+func (v *Variable) Chan() chan Variable {
 	if v.Type != ChanVariable {
 		panic("value is not channel")
 	}
@@ -102,13 +126,13 @@ func (v Variable) Chan() chan Variable {
 	panic("not defined channel")
 }
 
-func (v Variable) panicForUndefinedVariable(sec *Variable) {
+func (v *Variable) panicForUndefinedVariable(sec *Variable) {
 	if v.Type != sec.Type {
 		panic(fmt.Sprintf("Expected same types but received %T and %T", v.TypeName(), sec.TypeName()))
 	}
 }
 
-func (v Variable) Sum(sec *Variable) interface{} {
+func (v *Variable) Sum(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type == IntegerVariable {
 		return v.Integer() + sec.Integer()
@@ -116,7 +140,7 @@ func (v Variable) Sum(sec *Variable) interface{} {
 	return v.StringValue() + sec.StringValue()
 }
 
-func (v Variable) Equal(sec *Variable) interface{} {
+func (v *Variable) Equal(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type == IntegerVariable {
 		return v.Integer() == sec.Integer()
@@ -126,7 +150,7 @@ func (v Variable) Equal(sec *Variable) interface{} {
 	return v.StringValue() == sec.StringValue()
 }
 
-func (v Variable) Minus(sec *Variable) interface{} {
+func (v *Variable) Minus(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type != IntegerVariable {
 		panic("Invalid operation: Only Integer Variables are allowed for minus")
@@ -134,7 +158,7 @@ func (v Variable) Minus(sec *Variable) interface{} {
 	return v.Integer() - sec.Integer()
 }
 
-func (v Variable) Multiple(sec *Variable) interface{} {
+func (v *Variable) Multiple(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type != IntegerVariable {
 		panic("Invalid operation: Only Integer Variables are allowed for multiplication")
@@ -142,7 +166,7 @@ func (v Variable) Multiple(sec *Variable) interface{} {
 	return v.Integer() * sec.Integer()
 }
 
-func (v Variable) Divide(sec *Variable) interface{} {
+func (v *Variable) Divide(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type != IntegerVariable {
 		panic("Invalid operation: Only Integer Variables are allowed for dividing")
@@ -150,7 +174,7 @@ func (v Variable) Divide(sec *Variable) interface{} {
 	return v.Integer() / sec.Integer()
 }
 
-func (v Variable) Mod(sec *Variable) interface{} {
+func (v *Variable) Mod(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type != IntegerVariable {
 		panic("Invalid operation: Only Integer Variables are allowed for dividing")
@@ -158,7 +182,7 @@ func (v Variable) Mod(sec *Variable) interface{} {
 	return int(math.Mod(float64(v.Integer()), float64(sec.Integer())))
 }
 
-func (v Variable) Pow(sec *Variable) interface{} {
+func (v *Variable) Pow(sec *Variable) interface{} {
 	v.panicForUndefinedVariable(sec)
 	if v.Type != IntegerVariable {
 		panic("Invalid operation: Only Integer Variables are allowed ")
@@ -166,7 +190,7 @@ func (v Variable) Pow(sec *Variable) interface{} {
 	return math.Pow(float64(v.Integer()), float64(sec.Integer()))
 }
 
-func (v Variable) NotifyChan(vb Variable) {
+func (v *Variable) NotifyChan(vb Variable) {
 	ch := v.Chan()
 	ch <- vb
 }

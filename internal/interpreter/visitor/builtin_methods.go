@@ -27,7 +27,11 @@ func (v *Visitor) onSocketMessage() {
 		go func() {
 			for {
 				chat := <-socketCh
-				ch.NotifyChan(*miscs.NewVariable(chat.Text))
+				value := miscs.StructType{
+					"user_id": miscs.NewVariable(chat.SocketID),
+					"text":    miscs.NewVariable(chat.Text),
+				}
+				ch.NotifyChan(*miscs.NewVariable(value))
 			}
 		}()
 		return miscs.NewReturnStatement(ch)

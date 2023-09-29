@@ -5,6 +5,7 @@ import (
 	"github.com/abolfazlalz/goeventer/internal/interpreter/miscs"
 	"github.com/abolfazlalz/goeventer/internal/websocket"
 	"github.com/antlr4-go/antlr/v4"
+	"github.com/samber/lo"
 	"sync"
 )
 
@@ -15,6 +16,17 @@ type Visitor struct {
 	functions map[string]func(...interface{}) interface{}
 	state     int
 	ch        chan *websocket.Chat
+}
+
+func (v *Visitor) VisitStructStat(ctx *grammar.StructStatContext) interface{} {
+	name := ctx.ID().GetText()
+	values := make(miscs.StructType)
+	for _, structValue := range ctx.AllStructField() {
+		fieldName := structValue.ID().GetText()
+		values[fieldName] = v.Visit(structValue.Expr()).(*miscs.Variable)
+	}
+	v.defineVariable(name, miscs.NewVariable(values))
+	return nil
 }
 
 func NewVisitor() *Visitor {
@@ -62,7 +74,7 @@ func (v *Visitor) VisitStatBlock(ctx *grammar.StatBlockContext) interface{} {
 	return nil
 }
 
-func (v *Visitor) VisitAssignVariable(ctx *grammar.AssignVariableContext) interface{} {
+func (v *Visitor) VisitAssignVariableStat(ctx *grammar.AssignVariableStatContext) interface{} {
 	name := ctx.ID().GetText()
 	value := v.Visit(ctx.Expr()).(*miscs.Variable)
 
@@ -74,7 +86,25 @@ func (v *Visitor) VisitAssignVariable(ctx *grammar.AssignVariableContext) interf
 	return value
 }
 
-func (v *Visitor) VisitDefineFunction(ctx *grammar.DefineFunctionContext) interface{} {
+func (v *Visitor) VisitUpdateVariableStat(ctx *grammar.UpdateVariableStatContext) interface{} {
+	ids := lo.Map(ctx.AllID(), func(item antlr.TerminalNode, _ int) string {
+		return item.GetText()
+	})
+	name := ids[0]
+	value := v.Visit(ctx.Expr()).(*miscs.Variable)
+	if len(ids) > 1 {
+		variable := v.getVariable(name)
+		for i := 1; i < len(ids)-1; i++ {
+			variable = variable.FieldStruct(ids[i])
+		}
+		variable.SetFieldStruct(ids[len(ids)-1], value)
+	} else {
+		v.setVariable(name, value)
+	}
+	return nil
+}
+
+func (v *Visitor) VisitDefineFunctionStat(ctx *grammar.DefineFunctionStatContext) interface{} {
 	methodName := ctx.ID().GetText()
 
 	v.functions[methodName] = func(args ...interface{}) interface{} {
@@ -154,7 +184,7 @@ func (v *Visitor) VisitStat(ctx *grammar.StatContext) interface{} {
 	return nil
 }
 
-func (v *Visitor) VisitDefineListener(ctx *grammar.DefineListenerContext) interface{} {
+func (v *Visitor) VisitDefineListenerStat(ctx *grammar.DefineListenerStatContext) interface{} {
 	variable := v.Visit(ctx.MethodCall())
 	var ch chan miscs.Variable
 	if variableStatement, ok := variable.(*miscs.Variable); ok {
@@ -165,7 +195,11 @@ func (v *Visitor) VisitDefineListener(ctx *grammar.DefineListenerContext) interf
 		return nil
 	}
 	go func() {
-		<-ch
+		value := <-ch
+		if ctx.ID() != nil {
+			idName := ctx.ID().GetText()
+			v.defineVariable(idName, &value)
+		}
 		v.Visit(ctx.StatBlock())
 	}()
 	return nil

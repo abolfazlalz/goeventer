@@ -19,7 +19,19 @@ func (v *BaseGoEventerVisitor) VisitStat(ctx *StatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseGoEventerVisitor) VisitAssignVariable(ctx *AssignVariableContext) interface{} {
+func (v *BaseGoEventerVisitor) VisitStructStat(ctx *StructStatContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseGoEventerVisitor) VisitStructField(ctx *StructFieldContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseGoEventerVisitor) VisitAssignVariableStat(ctx *AssignVariableStatContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseGoEventerVisitor) VisitUpdateVariableStat(ctx *UpdateVariableStatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
@@ -35,11 +47,11 @@ func (v *BaseGoEventerVisitor) VisitWhileStat(ctx *WhileStatContext) interface{}
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseGoEventerVisitor) VisitDefineListener(ctx *DefineListenerContext) interface{} {
+func (v *BaseGoEventerVisitor) VisitDefineListenerStat(ctx *DefineListenerStatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
-func (v *BaseGoEventerVisitor) VisitDefineFunction(ctx *DefineFunctionContext) interface{} {
+func (v *BaseGoEventerVisitor) VisitDefineFunctionStat(ctx *DefineFunctionStatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 

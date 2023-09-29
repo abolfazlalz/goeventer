@@ -16,8 +16,17 @@ type GoEventerVisitor interface {
 	// Visit a parse tree produced by GoEventerParser#stat.
 	VisitStat(ctx *StatContext) interface{}
 
-	// Visit a parse tree produced by GoEventerParser#assignVariable.
-	VisitAssignVariable(ctx *AssignVariableContext) interface{}
+	// Visit a parse tree produced by GoEventerParser#structStat.
+	VisitStructStat(ctx *StructStatContext) interface{}
+
+	// Visit a parse tree produced by GoEventerParser#structField.
+	VisitStructField(ctx *StructFieldContext) interface{}
+
+	// Visit a parse tree produced by GoEventerParser#assignVariableStat.
+	VisitAssignVariableStat(ctx *AssignVariableStatContext) interface{}
+
+	// Visit a parse tree produced by GoEventerParser#updateVariableStat.
+	VisitUpdateVariableStat(ctx *UpdateVariableStatContext) interface{}
 
 	// Visit a parse tree produced by GoEventerParser#notifyChanStat.
 	VisitNotifyChanStat(ctx *NotifyChanStatContext) interface{}
@@ -28,11 +37,11 @@ type GoEventerVisitor interface {
 	// Visit a parse tree produced by GoEventerParser#whileStat.
 	VisitWhileStat(ctx *WhileStatContext) interface{}
 
-	// Visit a parse tree produced by GoEventerParser#defineListener.
-	VisitDefineListener(ctx *DefineListenerContext) interface{}
+	// Visit a parse tree produced by GoEventerParser#defineListenerStat.
+	VisitDefineListenerStat(ctx *DefineListenerStatContext) interface{}
 
-	// Visit a parse tree produced by GoEventerParser#defineFunction.
-	VisitDefineFunction(ctx *DefineFunctionContext) interface{}
+	// Visit a parse tree produced by GoEventerParser#defineFunctionStat.
+	VisitDefineFunctionStat(ctx *DefineFunctionStatContext) interface{}
 
 	// Visit a parse tree produced by GoEventerParser#statBlock.
 	VisitStatBlock(ctx *StatBlockContext) interface{}

@@ -10,17 +10,31 @@ block
 
 stat
     : methodCallStat
-    | defineListener
-    | assignVariable
+    | defineListenerStat
+    | updateVariableStat
+    | assignVariableStat
     | forStat
     | whileStat
-    | defineFunction
+    | defineFunctionStat
     | returnStat
     | notifyChanStat
+    | structStat
     ;
 
-assignVariable
+structStat
+    : STRUCT ID BARACE_OPEN structField (';' structField)* BARACE_CLOSE SCOL
+    ;
+
+structField
+    : ID COL expr
+    ;
+
+assignVariableStat
     : ID op=(ASSIGN|UPDATE) expr SCOL
+    ;
+
+updateVariableStat
+    : ID (DOT ID)* UPDATE expr SCOL
     ;
 
 notifyChanStat
@@ -35,11 +49,11 @@ whileStat
  : WHILE expr statBlock
  ;
 
-defineListener
-    : ON methodCall statBlock
+defineListenerStat
+    : ON (ID ASSIGN)? methodCall statBlock
     ;
 
-defineFunction
+defineFunctionStat
     : FUNC ID PARAN_OPEN functionDefineArguments PARAN_CLOSE statBlock
     ;
 
@@ -88,7 +102,7 @@ atom
  : PARAN_OPEN expr PARAN_CLOSE #exprAtom
  | (INT | FLOAT)  #numberAtom
  | (TRUE | FALSE) #booleanAtom
- | ID             #idAtom
+ | ID (DOT ID)*             #idAtom
  | STRING         #stringAtom
  | NIL            #nilAtom
  | CHAN           #makeChanAtom
@@ -99,6 +113,7 @@ UPDATE : '=';
 
 SCOL : ';';
 COL : ':';
+DOT : '.';
 
 FOR : 'for';
 WHILE : 'while';
@@ -109,6 +124,7 @@ RETURN : 'return';
 
 CHAN : 'chan';
 NOTIFY : 'notify';
+STRUCT : 'struct';
 
 STRING_TYPE : 'string';
 INTEGER_TYPE : 'int';

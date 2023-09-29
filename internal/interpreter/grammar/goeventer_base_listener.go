@@ -38,11 +38,29 @@ func (s *BaseGoEventerListener) EnterStat(ctx *StatContext) {}
 // ExitStat is called when production stat is exited.
 func (s *BaseGoEventerListener) ExitStat(ctx *StatContext) {}
 
-// EnterAssignVariable is called when production assignVariable is entered.
-func (s *BaseGoEventerListener) EnterAssignVariable(ctx *AssignVariableContext) {}
+// EnterStructStat is called when production structStat is entered.
+func (s *BaseGoEventerListener) EnterStructStat(ctx *StructStatContext) {}
 
-// ExitAssignVariable is called when production assignVariable is exited.
-func (s *BaseGoEventerListener) ExitAssignVariable(ctx *AssignVariableContext) {}
+// ExitStructStat is called when production structStat is exited.
+func (s *BaseGoEventerListener) ExitStructStat(ctx *StructStatContext) {}
+
+// EnterStructField is called when production structField is entered.
+func (s *BaseGoEventerListener) EnterStructField(ctx *StructFieldContext) {}
+
+// ExitStructField is called when production structField is exited.
+func (s *BaseGoEventerListener) ExitStructField(ctx *StructFieldContext) {}
+
+// EnterAssignVariableStat is called when production assignVariableStat is entered.
+func (s *BaseGoEventerListener) EnterAssignVariableStat(ctx *AssignVariableStatContext) {}
+
+// ExitAssignVariableStat is called when production assignVariableStat is exited.
+func (s *BaseGoEventerListener) ExitAssignVariableStat(ctx *AssignVariableStatContext) {}
+
+// EnterUpdateVariableStat is called when production updateVariableStat is entered.
+func (s *BaseGoEventerListener) EnterUpdateVariableStat(ctx *UpdateVariableStatContext) {}
+
+// ExitUpdateVariableStat is called when production updateVariableStat is exited.
+func (s *BaseGoEventerListener) ExitUpdateVariableStat(ctx *UpdateVariableStatContext) {}
 
 // EnterNotifyChanStat is called when production notifyChanStat is entered.
 func (s *BaseGoEventerListener) EnterNotifyChanStat(ctx *NotifyChanStatContext) {}
@@ -62,17 +80,17 @@ func (s *BaseGoEventerListener) EnterWhileStat(ctx *WhileStatContext) {}
 // ExitWhileStat is called when production whileStat is exited.
 func (s *BaseGoEventerListener) ExitWhileStat(ctx *WhileStatContext) {}
 
-// EnterDefineListener is called when production defineListener is entered.
-func (s *BaseGoEventerListener) EnterDefineListener(ctx *DefineListenerContext) {}
+// EnterDefineListenerStat is called when production defineListenerStat is entered.
+func (s *BaseGoEventerListener) EnterDefineListenerStat(ctx *DefineListenerStatContext) {}
 
-// ExitDefineListener is called when production defineListener is exited.
-func (s *BaseGoEventerListener) ExitDefineListener(ctx *DefineListenerContext) {}
+// ExitDefineListenerStat is called when production defineListenerStat is exited.
+func (s *BaseGoEventerListener) ExitDefineListenerStat(ctx *DefineListenerStatContext) {}
 
-// EnterDefineFunction is called when production defineFunction is entered.
-func (s *BaseGoEventerListener) EnterDefineFunction(ctx *DefineFunctionContext) {}
+// EnterDefineFunctionStat is called when production defineFunctionStat is entered.
+func (s *BaseGoEventerListener) EnterDefineFunctionStat(ctx *DefineFunctionStatContext) {}
 
-// ExitDefineFunction is called when production defineFunction is exited.
-func (s *BaseGoEventerListener) ExitDefineFunction(ctx *DefineFunctionContext) {}
+// ExitDefineFunctionStat is called when production defineFunctionStat is exited.
+func (s *BaseGoEventerListener) ExitDefineFunctionStat(ctx *DefineFunctionStatContext) {}
 
 // EnterStatBlock is called when production statBlock is entered.
 func (s *BaseGoEventerListener) EnterStatBlock(ctx *StatBlockContext) {}

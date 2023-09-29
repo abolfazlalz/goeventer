@@ -16,8 +16,17 @@ type GoEventerListener interface {
 	// EnterStat is called when entering the stat production.
 	EnterStat(c *StatContext)
 
-	// EnterAssignVariable is called when entering the assignVariable production.
-	EnterAssignVariable(c *AssignVariableContext)
+	// EnterStructStat is called when entering the structStat production.
+	EnterStructStat(c *StructStatContext)
+
+	// EnterStructField is called when entering the structField production.
+	EnterStructField(c *StructFieldContext)
+
+	// EnterAssignVariableStat is called when entering the assignVariableStat production.
+	EnterAssignVariableStat(c *AssignVariableStatContext)
+
+	// EnterUpdateVariableStat is called when entering the updateVariableStat production.
+	EnterUpdateVariableStat(c *UpdateVariableStatContext)
 
 	// EnterNotifyChanStat is called when entering the notifyChanStat production.
 	EnterNotifyChanStat(c *NotifyChanStatContext)
@@ -28,11 +37,11 @@ type GoEventerListener interface {
 	// EnterWhileStat is called when entering the whileStat production.
 	EnterWhileStat(c *WhileStatContext)
 
-	// EnterDefineListener is called when entering the defineListener production.
-	EnterDefineListener(c *DefineListenerContext)
+	// EnterDefineListenerStat is called when entering the defineListenerStat production.
+	EnterDefineListenerStat(c *DefineListenerStatContext)
 
-	// EnterDefineFunction is called when entering the defineFunction production.
-	EnterDefineFunction(c *DefineFunctionContext)
+	// EnterDefineFunctionStat is called when entering the defineFunctionStat production.
+	EnterDefineFunctionStat(c *DefineFunctionStatContext)
 
 	// EnterStatBlock is called when entering the statBlock production.
 	EnterStatBlock(c *StatBlockContext)
@@ -115,8 +124,17 @@ type GoEventerListener interface {
 	// ExitStat is called when exiting the stat production.
 	ExitStat(c *StatContext)
 
-	// ExitAssignVariable is called when exiting the assignVariable production.
-	ExitAssignVariable(c *AssignVariableContext)
+	// ExitStructStat is called when exiting the structStat production.
+	ExitStructStat(c *StructStatContext)
+
+	// ExitStructField is called when exiting the structField production.
+	ExitStructField(c *StructFieldContext)
+
+	// ExitAssignVariableStat is called when exiting the assignVariableStat production.
+	ExitAssignVariableStat(c *AssignVariableStatContext)
+
+	// ExitUpdateVariableStat is called when exiting the updateVariableStat production.
+	ExitUpdateVariableStat(c *UpdateVariableStatContext)
 
 	// ExitNotifyChanStat is called when exiting the notifyChanStat production.
 	ExitNotifyChanStat(c *NotifyChanStatContext)
@@ -127,11 +145,11 @@ type GoEventerListener interface {
 	// ExitWhileStat is called when exiting the whileStat production.
 	ExitWhileStat(c *WhileStatContext)
 
-	// ExitDefineListener is called when exiting the defineListener production.
-	ExitDefineListener(c *DefineListenerContext)
+	// ExitDefineListenerStat is called when exiting the defineListenerStat production.
+	ExitDefineListenerStat(c *DefineListenerStatContext)
 
-	// ExitDefineFunction is called when exiting the defineFunction production.
-	ExitDefineFunction(c *DefineFunctionContext)
+	// ExitDefineFunctionStat is called when exiting the defineFunctionStat production.
+	ExitDefineFunctionStat(c *DefineFunctionStatContext)
 
 	// ExitStatBlock is called when exiting the statBlock production.
 	ExitStatBlock(c *StatBlockContext)
