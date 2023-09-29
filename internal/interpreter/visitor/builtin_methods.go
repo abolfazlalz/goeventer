@@ -11,10 +11,10 @@ func (v *Visitor) loadBuiltinMethods() {
 	for _, method := range methods {
 		v.functions[method.Name()] = method.Call
 	}
-	v.onSocketMessage()
+	v.socketMethods()
 }
 
-func (v *Visitor) onSocketMessage() {
+func (v *Visitor) socketMethods() {
 	defer func() {
 		v.mu.Unlock()
 	}()
@@ -36,8 +36,11 @@ func (v *Visitor) onSocketMessage() {
 		}()
 		return miscs.NewReturnStatement(ch)
 	}
-}
 
-func (v *Visitor) sendSocketMessage() {
-
+	v.functions["send_socket"] = func(i ...interface{}) interface{} {
+		userId := i[0].(*miscs.Variable)
+		msg := i[1].(*miscs.Variable)
+		websocket.Socket().Broadcast(userId.StringValue(), msg.StringValue())
+		return nil
+	}
 }

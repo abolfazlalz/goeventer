@@ -19,6 +19,14 @@ func (v *BaseGoEventerVisitor) VisitStat(ctx *StatContext) interface{} {
 	return v.VisitChildren(ctx)
 }
 
+func (v *BaseGoEventerVisitor) VisitIfStat(ctx *IfStatContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
+func (v *BaseGoEventerVisitor) VisitConditionBlock(ctx *ConditionBlockContext) interface{} {
+	return v.VisitChildren(ctx)
+}
+
 func (v *BaseGoEventerVisitor) VisitStructStat(ctx *StructStatContext) interface{} {
 	return v.VisitChildren(ctx)
 }

@@ -19,7 +19,16 @@ stat
     | returnStat
     | notifyChanStat
     | structStat
+    | ifStat
     ;
+
+ifStat
+ : IF conditionBlock (ELSE IF conditionBlock)* (ELSE statBlock)?
+ ;
+
+conditionBlock
+ : expr statBlock
+ ;
 
 structStat
     : STRUCT ID BARACE_OPEN structField (';' structField)* BARACE_CLOSE SCOL
@@ -121,6 +130,9 @@ RANGE : 'range';
 FUNC : 'func';
 ON : 'on';
 RETURN : 'return';
+
+IF : 'if';
+ELSE : 'else';
 
 CHAN : 'chan';
 NOTIFY : 'notify';

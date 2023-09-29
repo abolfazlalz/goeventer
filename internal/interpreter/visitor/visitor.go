@@ -184,6 +184,25 @@ func (v *Visitor) VisitStat(ctx *grammar.StatContext) interface{} {
 	return nil
 }
 
+func (v *Visitor) VisitIfStat(ctx *grammar.IfStatContext) interface{} {
+	conditions := ctx.AllConditionBlock()
+	evaluatedBlock := false
+	for _, condition := range conditions {
+		evaluated := v.Visit(condition.Expr()).(*miscs.Variable)
+		if evaluated.Boolean() {
+			evaluatedBlock = true
+			v.Visit(condition.StatBlock())
+			break
+		}
+	}
+
+	if !evaluatedBlock && ctx.StatBlock() != nil {
+		v.Visit(ctx.StatBlock())
+	}
+
+	return nil
+}
+
 func (v *Visitor) VisitDefineListenerStat(ctx *grammar.DefineListenerStatContext) interface{} {
 	variable := v.Visit(ctx.MethodCall())
 	var ch chan miscs.Variable
@@ -195,12 +214,14 @@ func (v *Visitor) VisitDefineListenerStat(ctx *grammar.DefineListenerStatContext
 		return nil
 	}
 	go func() {
-		value := <-ch
-		if ctx.ID() != nil {
-			idName := ctx.ID().GetText()
-			v.defineVariable(idName, &value)
+		for {
+			value := <-ch
+			if ctx.ID() != nil {
+				idName := ctx.ID().GetText()
+				v.defineVariable(idName, &value)
+			}
+			v.Visit(ctx.StatBlock())
 		}
-		v.Visit(ctx.StatBlock())
 	}()
 	return nil
 }

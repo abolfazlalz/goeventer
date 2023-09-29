@@ -16,6 +16,12 @@ type GoEventerListener interface {
 	// EnterStat is called when entering the stat production.
 	EnterStat(c *StatContext)
 
+	// EnterIfStat is called when entering the ifStat production.
+	EnterIfStat(c *IfStatContext)
+
+	// EnterConditionBlock is called when entering the conditionBlock production.
+	EnterConditionBlock(c *ConditionBlockContext)
+
 	// EnterStructStat is called when entering the structStat production.
 	EnterStructStat(c *StructStatContext)
 
@@ -123,6 +129,12 @@ type GoEventerListener interface {
 
 	// ExitStat is called when exiting the stat production.
 	ExitStat(c *StatContext)
+
+	// ExitIfStat is called when exiting the ifStat production.
+	ExitIfStat(c *IfStatContext)
+
+	// ExitConditionBlock is called when exiting the conditionBlock production.
+	ExitConditionBlock(c *ConditionBlockContext)
 
 	// ExitStructStat is called when exiting the structStat production.
 	ExitStructStat(c *StructStatContext)

@@ -56,7 +56,7 @@ func NewVariable(value interface{}) *Variable {
 }
 
 func NewChanVariable() *Variable {
-	return NewVariable(make(chan Variable, 1))
+	return NewVariable(make(chan Variable))
 }
 
 func (v *Variable) TypeName() string {

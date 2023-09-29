@@ -16,6 +16,12 @@ type GoEventerVisitor interface {
 	// Visit a parse tree produced by GoEventerParser#stat.
 	VisitStat(ctx *StatContext) interface{}
 
+	// Visit a parse tree produced by GoEventerParser#ifStat.
+	VisitIfStat(ctx *IfStatContext) interface{}
+
+	// Visit a parse tree produced by GoEventerParser#conditionBlock.
+	VisitConditionBlock(ctx *ConditionBlockContext) interface{}
+
 	// Visit a parse tree produced by GoEventerParser#structStat.
 	VisitStructStat(ctx *StructStatContext) interface{}
 

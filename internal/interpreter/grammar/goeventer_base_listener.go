@@ -38,6 +38,18 @@ func (s *BaseGoEventerListener) EnterStat(ctx *StatContext) {}
 // ExitStat is called when production stat is exited.
 func (s *BaseGoEventerListener) ExitStat(ctx *StatContext) {}
 
+// EnterIfStat is called when production ifStat is entered.
+func (s *BaseGoEventerListener) EnterIfStat(ctx *IfStatContext) {}
+
+// ExitIfStat is called when production ifStat is exited.
+func (s *BaseGoEventerListener) ExitIfStat(ctx *IfStatContext) {}
+
+// EnterConditionBlock is called when production conditionBlock is entered.
+func (s *BaseGoEventerListener) EnterConditionBlock(ctx *ConditionBlockContext) {}
+
+// ExitConditionBlock is called when production conditionBlock is exited.
+func (s *BaseGoEventerListener) ExitConditionBlock(ctx *ConditionBlockContext) {}
+
 // EnterStructStat is called when production structStat is entered.
 func (s *BaseGoEventerListener) EnterStructStat(ctx *StructStatContext) {}
 
