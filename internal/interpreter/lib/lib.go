@@ -9,5 +9,9 @@ func Methods() []MethodInterface {
 	return []MethodInterface{
 		LogMethod{},
 		Print{},
+		WebSocketListen{},
+		WebSocketSend{},
+		JsonDecode{},
+		JsonEncode{},
 	}
 }

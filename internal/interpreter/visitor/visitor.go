@@ -76,7 +76,7 @@ func (v *Visitor) VisitStatBlock(ctx *grammar.StatBlockContext) interface{} {
 
 func (v *Visitor) VisitAssignVariableStat(ctx *grammar.AssignVariableStatContext) interface{} {
 	name := ctx.ID().GetText()
-	value := v.Visit(ctx.Expr()).(*miscs.Variable)
+	value := v.variableFromContext(v.Visit(ctx.Expr()))
 
 	if ctx.GetOp().GetTokenType() == grammar.GoEventerLexerASSIGN {
 		v.variables[v.state][name] = value

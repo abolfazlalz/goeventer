@@ -55,6 +55,16 @@ func NewVariable(value interface{}) *Variable {
 	}
 }
 
+func GetVariable(value interface{}) *Variable {
+	if variable, ok := value.(*Variable); ok {
+		return variable
+	}
+	if returnStat, ok := value.(*ReturnStatement); ok {
+		return returnStat.Variable()
+	}
+	return NewVariable(nil)
+}
+
 func NewChanVariable() *Variable {
 	return NewVariable(make(chan Variable))
 }
